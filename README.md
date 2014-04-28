@@ -24,7 +24,7 @@ For now, let's create a simple Node.js application that tests puzzles with the f
 
 As you can see, we have one long string where each row is separated by newline characters, '\n', and all of the empty squares are represented by zeros. 
 
-##The Methods
+##The Functions
 
 In order to create this sudoku solver, I see the following functions that we need to write:
 
