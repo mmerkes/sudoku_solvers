@@ -14,15 +14,15 @@ This is a [backtracking](http://en.wikipedia.org/wiki/Backtracking) algorithm. T
 
 For now, let's create a simple Node.js application that tests puzzles with the following format:
 
-  var board = '090000006\n' + 
-              '000960485\n' +
-              '000581000\n' +
-              '004000000\n' +
-              '517200900\n' +
-              '602000370\n' +
-              '100804020\n' +
-              '706000810\n' +
-              '300090000';
+    var board = '090000006\n' + 
+                '000960485\n' +
+                '000581000\n' +
+                '004000000\n' +
+                '517200900\n' +
+                '602000370\n' +
+                '100804020\n' +
+                '706000810\n' +
+                '300090000';
 
 As you can see, we have one long string where each row is separated by newline characters, '\n', and all of the empty squares are represented by zeros. 
 
