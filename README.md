@@ -1,4 +1,4 @@
-#Sudoku Solver from Scratch in JavaScript (TDD Style)
+#Sudoku Solver from Scratch in JavaScript (TDD Style): A Tutorial
 
 As a JS noob, it can be tough to come up with ideas to practice your skills, but at NOOBjs, we've got you in mind with our noob-first design philosophy, so we have a little project for you.
 
