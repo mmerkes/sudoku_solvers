@@ -31,7 +31,7 @@ module.exports.checkRow = function(board, row, value) {
   // Iterate through every value in the row
   for(var i = 0; i < board[row].length; i++) {
     // If a match is found, return false
-    if(board[row][i] == value) {
+    if(board[row][i] === value) {
       return false;
     }
   }
@@ -43,7 +43,7 @@ module.exports.checkColumn = function(board, column, value) {
   // Iterate through each value in the column
   for(var i = 0; i < board.length; i++) {
     // If a match is found, return false
-    if(board[i][column] == value) {
+    if(board[i][column] === value) {
       return false;
     }
   }
@@ -57,12 +57,12 @@ module.exports.check3x3Square = function(board, column, row, value) {
       rowCorner = 0,
       squareSize = 3;
 
-  // Find upper left corner column
+  // Find the left-most column
   while(column >= columnCorner + squareSize) {
     columnCorner += squareSize;
   }
 
-  // Find upper left corner row
+  // Find the upper-most row
   while(row >= rowCorner + squareSize) {
     rowCorner += squareSize;
   }
@@ -72,7 +72,7 @@ module.exports.check3x3Square = function(board, column, row, value) {
     // Iterate through each column
     for(var j = columnCorner; j < columnCorner + squareSize; j++) {
       // Return false is a match is found
-      if(board[i][j] == value) {        
+      if(board[i][j] === value) {        
         return false;
       }
     }
@@ -103,9 +103,9 @@ module.exports.solvePuzzle = function(board, emptyPositions) {
     // Was a valid number found?
     found = false;
     // Keep trying new values until either the limit
-    // was reached or a valid integer was found
+    // was reached or a valid value was found
     while(!found && value <= limit) {
-      // If a valid integer is found, marked found to true,
+      // If a valid value is found, marked found to true,
       // set the position to the value, and move to the
       // next position
       if(this.checkValue(board, column, row, value)) {
@@ -118,7 +118,7 @@ module.exports.solvePuzzle = function(board, emptyPositions) {
         value++;
       }
     }
-    // If no valid integer was found and the limit was
+    // If no valid value was found and the limit was
     // reached, move back to the previous position
     if(!found) {
       board[row][column] = 0;

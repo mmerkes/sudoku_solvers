@@ -1,12 +1,14 @@
 #Sudoku Solver from Scratch in JavaScript (TDD Style)
 
-We've all played sudoku. Maybe you enjoy it, or maybe you really don't, but you feel offended by its incompleteness in the in-flight magazine. Either way, the puzzle must be solved! And just copying the solution is not very satisfying. However, it's not really cheating if you write an app that does the heavy lifting, is it? That's what we're setting out to do today - write a sudoku solver from scratch in JavaScript. Oh, and why don't we do it [TDD](http://en.wikipedia.org/wiki/Test-driven_development) style? Don't worry, the solver should be so simple that a noob should be able to follow! No promises...
+As a JS noob, it can be tough to come up with ideas to practice your skills, but at NOOBjs, we've got you in mind with our noob-first design philosophy, so we have a little project for you.
 
-The goal of this tutorial is to walk you through writing a sudoku solver in JavaScript, so I will not go into detail regarding the testing tools, but you should be able to get the idea of how everything is working.
+We've all played sudoku. Maybe you enjoy it, or maybe you really don't, but you feel offended by its incompleteness in the in-flight magazine. Either way, the puzzle must be solved! Sometimes you don't want to bother, but just copying the solution is not very satisfying. However, it's not really cheating if you write an app that does the heavy lifting, is it? That's what we're setting out to do today - write a sudoku solver from scratch in JavaScript. Oh, and why don't we do it [TDD](http://en.wikipedia.org/wiki/Test-driven_development) style? Don't worry, the solver should be so simple that a noob should be able to follow! No promises...
+
+The goal of this tutorial is to walk you through writing a sudoku solver in JavaScript, so I will not go into detail regarding the testing tools, but you should be able to get the idea of how everything is working. It won't be the fastest solver out there, but it will get the job done.
 
 ##Our Algorithm
 
-The most basic way I could think of to write a sudoku solver was to start at the first empty square, try a number, and check the row, column and nearest 3x3 square for a match. If there is no match, the number is currently valid, so move to the next square and try a new number. If you try numbers 1-9 and find no valid numbers, go back to the previous square and increment it by one until you either reach 10 or you find a new possible valid number. Keep following this same plan, sliding forward and backwards through the empty squares until you arrive at a solution.
+The most basic way I could think of to write a sudoku solver is to start at the first empty square, try a number, and check the row, column and nearest 3x3 square for a match. If there is no match, the number is currently valid, so move to the next square and try a new number. If you try numbers 1-9 and find no valid numbers, go back to the previous square and increment it by one until you either exceeded 9 or you find a new possible valid number. Keep following this same plan, sliding forward and backwards through the empty squares until you arrive at a solution.
 
 This is a [backtracking](http://en.wikipedia.org/wiki/Backtracking) algorithm. The basic idea being that you incrementally build a solution and discard it once you realize that it's not viable.
 
@@ -30,7 +32,7 @@ In order to create this sudoku solver, I see the following functions that we nee
 
 1. `parseBoard`: parse the string into a 2D array and convert strings to integers for easier manipulation
 
-2. `saveEmptyPositions`: iterate through the board and save all of the empty positions into an array so we can track which number are mutable and keep order to our testing
+2. `saveEmptyPositions`: iterate through the board and save all of the empty positions into an array so we can track which numbers are mutable and keep order to our testing
 
 3. `checkRow`, `checkColumn`, `check3x3Square`, `checkValue`: check the column, row and current 3x3 square for a match to the current value tested, which can all be called with `checkValue`
 
@@ -84,7 +86,7 @@ So far, we're not actually doing anything. We're just setting the stage. Looking
     describe('#parseBoard()', function() {
       it('should parse a sudoku board into a 2D array', function() {
         parsedBoard = parseBoard(board);
-        expectedBoard = [
+        var expectedBoard = [
           [0,9,0,0,0,0,0,0,6],
           [0,0,0,9,6,0,4,8,5],
           [0,0,0,5,8,1,0,0,0],
@@ -161,7 +163,7 @@ Write an empty `saveEmptyPositions` function and run your test again with Mocha 
       // Check every square in the puzzle for a zero
       for(var i = 0; i < board.length; i++) {
         for(var j = 0; j < board[i].length; j++) {
-          // If a zero is found, so that position
+          // If a zero is found, save that position
           if(board[i][j] === 0) {
             emptyPositions.push([i, j]);
           }
@@ -176,7 +178,7 @@ All tests should be green!
 
 ##Check the Row, Column, and 3x3 Square
 
-Now, we have the sudoku board parsed into a 2D array, and we have all of the empty positions that we need to find a number for. Next, we need to write the `checkRow`, `checkColumn`, and `check3x3Square` functions to look for conflicts. When we have those three, we can combine into the `checkValue` function to confirm the validity of a number in one call. Once we can actually check values to plug into our puzzle, we can move onto the stage of trying numbers.
+Now, we have the sudoku board parsed into a 2D array, and we have all of the empty positions that we need to fill. Next, we need to write the `checkRow`, `checkColumn`, and `check3x3Square` functions to look for conflicts. When we have those three, we can combine them into the `checkValue` function to confirm the validity of a number in one call. Once we can actually check values we plug into our puzzle, we can move onto the stage of trying numbers systematically.
 
 Starting with our `checkRow` function, we need to see if there are any conflicts with the value we're trying. Time to write our test!
 
@@ -195,7 +197,7 @@ In this test, we're expecting 2 to not be in row 0, but we expect 9 to already b
       // Iterate through every value in the row
       for(var i = 0; i < board[row].length; i++) {
         // If a match is found, return false
-        if(board[row][i] == value) {
+        if(board[row][i] === value) {
           return false;
         }
       }
@@ -220,7 +222,7 @@ Verify that our test fails. Now, we can make it green:
       // Iterate through each value in the column
       for(var i = 0; i < board.length; i++) {
         // If a match is found, return false
-        if(board[i][column] == value) {
+        if(board[i][column] === value) {
           return false;
         }
       }
@@ -228,7 +230,7 @@ Verify that our test fails. Now, we can make it green:
       return true;
     };
 
-The final values to check will be the 3x3 square that the value lives in. Not only will be need to check every value in the appropriate square, but we'll have to get the appropriate square to check. Let's test it:
+The final values to check will be the 3x3 square that the value lives in. Before we can check every value in the appropriate square, we'll need to find the appropriate square to check. Let's test it:
 
     describe('#check3x3Square()', function() {
       it('should check that each value in a 3x3 square does not match the input', function() {
@@ -249,12 +251,12 @@ Once we verify that we have a failing test, we can work on making the test pass.
           rowCorner = 0,
           squareSize = 3;
 
-      // Find upper left corner column
+      // Find the left-most column
       while(column >= columnCorner + squareSize) {
         columnCorner += squareSize;
       }
 
-      // Find upper left corner row
+      // Find the upper-most row
       while(row >= rowCorner + squareSize) {
         rowCorner += squareSize;
       }
@@ -264,7 +266,7 @@ Once we verify that we have a failing test, we can work on making the test pass.
         // Iterate through each column
         for(var j = columnCorner; j < columnCorner + squareSize; j++) {
           // Return false is a match is found
-          if(board[i][j] == value) {        
+          if(board[i][j] === value) {        
             return false;
           }
         }
@@ -302,7 +304,7 @@ At this point, we have almost everything that we need to solve a sudoku puzzle. 
 
 ##Finding a Solution
 
-Now that we can test values, we need to write a function that can systematically check each possible value until we find a valid integer. Essentially, we need to go through each empty position that we saved in the `emptyPositions` array, try number 1-9 at each position until we find a valid number, and move to the next position. If no valid numbers are found at the next position, we move back a position to find a new valid number. We do this through all of the positions until we've found a whole board of valid positions, equating to our solution.
+Now that we can test values, we need to write a function that can systematically check each possible value until we find a valid value. Essentially, we need to go through each empty position that we saved in the `emptyPositions` array, try numbers 1-9 at each position until we find a valid number, and move to the next position. If no valid numbers are found at the next position, we move back a position to find a new valid number. We do this through all of the positions until we've found a whole board of valid positions, giving us our solution.
 
 Our `solvePuzzle` function should take a parsed board and an array of empty positions and return the solution (as well as log it). Let's write our failing test:
 
@@ -338,9 +340,9 @@ After we verify that this test will fail, we can begin writing the code to solve
         // Was a valid number found?
         found = false;
         // Keep trying new values until either the limit
-        // was reached or a valid integer was found
+        // was reached or a valid value was found
         while(!found && value <= limit) {
-          // If a valid integer is found, marked found to true,
+          // If a valid value is found, mark found true,
           // set the position to the value, and move to the
           // next position
           if(this.checkValue(board, column, row, value)) {
@@ -353,7 +355,7 @@ After we verify that this test will fail, we can begin writing the code to solve
             value++;
           }
         }
-        // If no valid integer was found and the limit was
+        // If no valid value was found and the limit was
         // reached, move back to the previous position
         if(!found) {
           board[row][column] = 0;
@@ -384,7 +386,7 @@ Now, all of our tests should be green again! And the solution should have logged
 
 ##Pull It All Together!
 
-Finally, we have everything we need! We just need to write `solveSudoku` which takes the original string of the sudoku board, parses the board, saves the empty positions, and runs our solver. That's it! All of this could have been handled in our `solvePuzzle` function, but I prefer to move as many individual steps out as possible. Our test is going to look just like our previous test, except that it's going to take our sudoku board string as an argument:
+Finally, we have everything we need! We just need to write `solveSudoku`, which takes the original string of the sudoku board, parses the board, saves the empty positions, and runs our solver. That's it! All of this could have been handled in our `solvePuzzle` function, but I prefer to move as many individual steps out as possible. Our test is going to look just like our previous test, except that it's going to take our sudoku board string as an argument:
 
     describe('#solveSudoku()', function() {
       it('should find a solution to the puzzle string passed in', function() {
@@ -407,11 +409,11 @@ All should now be green! And that's our fully tested sudoku solver.
 
 ##What next?
 
-The last step in TDD is refactoring, which I will save for you to do. There are a number of improvements that could be made. For example, we are manually checking every value, 1-9, whenever we test a new position no matter what. A possible improvement would be to be a little smarter about how we check values. Also, it currently does not handle the case of puzzle with no solution, nor does it handle any puzzle by 9x9s.
+The last step in TDD is refactoring, which we will save for you to do. As it stands, it solves a 'fiendish' puzzle in a few milliseconds, so we're content with the performance. However, there are a number of improvements that could be made. For example, we are manually checking every value, 1-9, whenever we test a new position no matter what. A possible improvement would be to be a little smarter about how we check values. Also, it currently does not handle the case of puzzle with no solution, nor does it handle any puzzles other than 9x9 boards.
 
-Other ideas would be to create a better interface to input a sudoku puzzle like a command line tool, web app, etc. Feel free to submit a pull request into the `followers` folder with your projects!
+Other ideas would be to create a better interface to input a sudoku puzzle like a command line tool, web app, etc. Feel free to submit a pull request into the `followers` folder to share your projects!
 
-
+We hope you enjoyed this little hands-on tutorial.
 
 
 

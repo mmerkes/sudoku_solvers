@@ -14,13 +14,13 @@ describe('Sudoku Solver', function() {
               '100804020\n' +
               '706000810\n' +
               '300090000';
-  var parsedBoard, emptyPositions;
+  var parsedBoard, expectedBoard, emptyPositions;
 
   describe('#parseBoard()', function() {
     it('should parse a sudoku board into a 2D array ' +
        ' and convert to integers', function() {
       parsedBoard = solver.parseBoard(board);
-      expectedBoard = [
+      var expectedBoard = [
         [0,9,0,0,0,0,0,0,6],
         [0,0,0,9,6,0,4,8,5],
         [0,0,0,5,8,1,0,0,0],
