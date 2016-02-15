@@ -1,0 +1,24 @@
+{
+  "name": "sudoku_solvers",
+  "version": "0.0.1",
+  "description": "As a JS noob, it can be tough to come up with ideas to practice your skills, but at NOOBjs, we've got you in mind with our noob-first design philosophy, so we have a little project for you.",
+  "main": "sample_puzzles.js",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmerkes/sudoku_solvers.git"
+  },
+  "author": "Matt Merkes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmerkes/sudoku_solvers/issues"
+  },
+  "homepage": "https://github.com/mmerkes/sudoku_solvers#readme"
+}
