@@ -46,7 +46,7 @@ Create a new directory to begin the project and navigate to that directory.
 
 ##Our Testing Suite
 
-In order to run the tests involved in this project, you will need Node.js installed. For the testing suite, we're going to use [Mocha](http://visionmedia.github.io/mocha/) and [Chai](http://chaijs.com/) for assertions, which can both be installed via NPM.
+In order to run the tests involved in this project, you will need Node.js installed. For the testing suite, we're going to use [Mocha](http://mochajs.org/) and [Chai](http://chaijs.com/) for assertions, which can both be installed via NPM.
 
 Mocha must be installed globally:
 
